@@ -1,0 +1,3 @@
+# register one or more bash scripts and give them an alaise
+# you can trigger script by calling php assist 'alaise-name' [args]
+start-rabbitmq-worker: 'src/console/rabbitmq-worker.php'
