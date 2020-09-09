@@ -763,7 +763,6 @@
                 if (is_dir($f))
                 {
                     $dir = $this->getall($f);
-                    var_dump($dir);
                 }
                 elseif(is_file($f))
                 {

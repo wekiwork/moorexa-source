@@ -51,9 +51,20 @@ $system = $base->fromConstant($constant->name('system')->value(FRAMEWORK_BASE_PA
 
 /**
  * ********
- * Create kernel path
+ * Create kernel path for source
  */
-$kernel = $base->fromConstant($constant->name('kernel')->value(DISTRIBUTION_BASE_PATH));
+$kernel = $base->fromConstant($constant->name('kernel')->value(SOURCE_BASE_PATH));
+
+/**
+ * *******
+ * Create distribution path
+ */
+$dist = $base->newConstant($constant->name('dist')->value(DISTRIBUTION_BASE_PATH));
+
+
+// add extra directory
+$dist->fromConstant($constant->name('extra')->value('extra'));
+
 
 /**
  * ********
@@ -61,7 +72,6 @@ $kernel = $base->fromConstant($constant->name('kernel')->value(DISTRIBUTION_BASE
  */
 $kernel->createConstantFromArray(
     $constant->name('config')->value('config'),
-    $constant->name('extra')->value('extra'),
     $constant->name('services')->value('services'),
     $constant->name('konsole')->value('console'),
     $constant->name('extension')->value('extensions')
@@ -83,14 +93,14 @@ $kernel->fromConstant($constant->name('database')->value('database'));
  * ********
  * Create public directory base path
  */
-$public = $kernel->fromConstant($constant->name('public')->value('public'));
+$public = $dist->fromConstant($constant->name('public')->value('public'));
 
 /**
  * ********
  * Create public sub directories path
  */
 $public->createConstantFromArray(
-    $constant->name('assets')->value(''),
+    $constant->name('assets')->value('assets'),
     $constant->name('media')->value('media'),
     $constant->name('image')->value('img')
 );
@@ -99,7 +109,7 @@ $public->createConstantFromArray(
  * ********
  * Create components path
  */
-$components = $kernel->fromConstant($constant->name('components')->value('components'));
+$components = $dist->fromConstant($constant->name('components')->value('components'));
 
 /**
  * ********

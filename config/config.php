@@ -52,7 +52,7 @@ $config->bootstrap ([
 	 * @config.default.env
 	 * info: path to the default environment yaml file
 	*/ 
-	"default.env" => DISTRIBUTION_BASE_PATH . '/environment.yaml',
+	"default.env" => SOURCE_BASE_PATH . '/environment.yaml',
 
 	/*
 	 ***************************
