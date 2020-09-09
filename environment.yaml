@@ -86,7 +86,7 @@ deploy:
 # error helper class
 pageNotFound: ''
 # enable template caching
-enableCaching : 'no'
+enableCaching : 'yes'
 # lets tell the system which event to trigger
 # they would be triggered if registered, this is just to help us maintain speed
 events:

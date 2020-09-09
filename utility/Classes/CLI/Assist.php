@@ -643,13 +643,13 @@ class Assist
                 self::$assistInstance = $this;
 
                 // console tables
-                include_once func()->const('console') . '/Table.php';
+                include_once get_path(func()->const('console'), '/Table.php');
 
                 // include functions
                 include_once __DIR__ . '/Assist/Functions.php';
 
                 // get bash configuration
-                $bashConfiguration = include_once func()->const('konsole') . '/bash.php';
+                $bashConfiguration = include_once get_path(func()->const('konsole'), '/bash.php');
 
                 // load command helper
                 self::loadCommandHelper();
@@ -2827,7 +2827,7 @@ class Assist
                 // add config
                 case 'add':
 
-                    $dbfile = self::getFullPath(func()->const('database') . '/database.php');
+                    $dbfile = self::getFullPath(get_path(func()->const('database'), '/database.php'));
 
                     // include file
                     include_once $dbfile;
@@ -5360,7 +5360,7 @@ class Assist
         $kernel = PATH_TO_KONSOLE;
         $kernel = ltrim($kernel, HOME);
 
-        include_once (self::$assistPath . $kernel . '/deploy.php');
+        include_once (self::$assistPath . get_path($kernel, '/deploy.php'));
 
         $deploy = new \DeployProject();
         $address = strlen($deploy->remote_address) > 4 ? $deploy->remote_address : $url;
@@ -6080,7 +6080,7 @@ class Assist
                         include_once($main);
 
                         // include routes.php
-                        include_once func()->const('services') . '/routes.php';
+                        include_once get_path(func()->const('services'), '/routes.php');
 
                         $called = Router::$routesCalled;
 
@@ -7069,7 +7069,7 @@ class Assist
             $expl = explode(":", $method);
             $register = strtolower($expl[0]);
             $meth = $expl[1];
-            $config = include_once(func()->const('konsole') . '/assist.php');
+            $config = include_once(get_path(func()->const('konsole'), '/assist.php'));
 
             if (is_array($config) && count($config) > 0) :
             

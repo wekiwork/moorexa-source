@@ -10,28 +10,37 @@ use Lightroom\Socket\Interfaces\SocketHandlerInterface;
  */
 // command helper
 // Within this function, you can register some default options to your assist commands
-command_helper([
-    'new page|new controller' => [
-        '-excludeDir=Views,Custom,Partials,Packages,Static',
-        function()
-        {
-            Assist::onDecrypt(function(&$content)
+if (SYSTEM_TYPE === 'services') :
+    command_helper([
+        'new page|new controller' => [
+            '-excludeDir=Views,Custom,Partials,Packages,Static',
+            function()
             {
-                // here you have the content
-                $content = str_replace('use function Lightroom\Templates\Functions\{render, redirect, json, view}', '', $content);
+                Assist::onDecrypt(function(&$content)
+                {
+                    // here you have the content
+                    $content = str_replace('use function Lightroom\Templates\Functions\{render, redirect, json, view}', '', $content);
 
-                // remove $this->view->render
-                $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\))/', 'app(\'screen\')->render([
-            \'status\' => \'success\',
-            \'message\' => \'route works!\'
-        ]);', $content);
-            });
-        }
-    ],
-    'deploy' => [
-        '--notrack'
-    ]
-]);
+                    // remove $this->view->render
+                    $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\))/', 'app(\'screen\')->render([
+                \'status\' => \'success\',
+                \'message\' => \'route works!\'
+            ]);', $content);
+                });
+            }
+        ],
+        'deploy' => [
+            '--notrack'
+        ]
+    ]);
+else:
+    // frontend possibly used.
+    command_helper([
+        'deploy' => [
+            '--notrack'
+        ]
+    ]);
+endif;
 
 // return bash
 return bash(
@@ -317,7 +326,7 @@ return bash(
             $composerFiles = [HOME . '/composer', HOME . '/composer.phar'];
 
             // load dependencies file
-            $dependencies = func()->const('config') . '/dependencies.php';
+            $dependencies = get_path(func()->const('config'), '/dependencies.php');
 
             // load from array ?
             if (file_exists($dependencies)) :

@@ -100,9 +100,14 @@ $public = $dist->fromConstant($constant->name('public')->value('public'));
  * Create public sub directories path
  */
 $public->createConstantFromArray(
+    $constant->name('helper')->value('helper'),
+    $constant->name('errors')->value('errors'),
     $constant->name('assets')->value('assets'),
-    $constant->name('media')->value('media'),
-    $constant->name('image')->value('img')
+    $constant->name('css')->value('assets/css'),
+    $constant->name('js')->value('assets/js'),
+    $constant->name('media')->value('assets/media'),
+    $constant->name('image')->value('assets/images')
+    
 );
 
 /**

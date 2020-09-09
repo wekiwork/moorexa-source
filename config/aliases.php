@@ -12,8 +12,7 @@ $config->configurationSocket([
 	'aliase'  => $socket->setClass(Lightroom\Core\BootCoreEngine::class)->setMethod('registerAliases'),
 ]);
 
-
 // Application Aliases
 $config->aliase([
-    Moorexa\View\Engine::class => PATH_TO_EXTRA . '/view-engine.php',
+    Moorexa\View\Engine::class => get_path(PATH_TO_EXTRA, '/view-engine.php'),
 ]);

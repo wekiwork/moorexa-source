@@ -52,7 +52,7 @@ $config->bootstrap ([
 	 * @config.default.env
 	 * info: path to the default environment yaml file
 	*/ 
-	"default.env" => SOURCE_BASE_PATH . '/environment.yaml',
+	"default.env" => get_path(SOURCE_BASE_PATH, '/environment.yaml'),
 
 	/*
 	 ***************************
@@ -236,8 +236,8 @@ $config->finder([
 	*/
 	'autoloader' => [
 		// eg. HOME .'/modules/*',
-		func()->const('lab') . '/library/*',
-		func()->const('utility') . '/Classes/*'
+		get_path(func()->const('lab'), '/library/') . '*',
+		get_path(func()->const('utility'), '/Classes/') . '*'
 	],
 
 
@@ -248,7 +248,7 @@ $config->finder([
 	 * info: Enables quick access to files through namespacing
 	*/
 	'namespacing' => [
-		'Plugin\*'	  		=> func()->const('plugin'),
-		'Moorexa\Events\*'  => func()->const('event'),
+		'Plugin\*'	  		=> get_path(func()->const('plugin'), ''),
+		'Moorexa\Events\*'  => get_path(func()->const('event'), ''),
 	]
 ]);

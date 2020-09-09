@@ -320,7 +320,7 @@ function bash(array $extenal, array $bash) : array
     endforeach;
 
     // load bash_script
-    $bashScript = PATH_TO_KONSOLE . '/bash_scripts.yaml';
+    $bashScript = get_path(PATH_TO_KONSOLE, '/bash_scripts.yaml');
 
     // check if script exists
     if (file_exists($bashScript)) :
