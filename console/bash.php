@@ -19,10 +19,10 @@ if (SYSTEM_TYPE === 'services') :
                 Assist::onDecrypt(function(&$content)
                 {
                     // here you have the content
-                    $content = str_replace('use function Lightroom\Templates\Functions\{render, redirect, json, view}', '', $content);
+                    $content = str_replace('use function Lightroom\Templates\Functions\{render, redirect, json, view};', '', $content);
 
                     // remove $this->view->render
-                    $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\))/', 'app(\'screen\')->render([
+                    $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\)[;])/', 'app(\'screen\')->render([
                 \'status\' => \'success\',
                 \'message\' => \'route works!\'
             ]);', $content);
