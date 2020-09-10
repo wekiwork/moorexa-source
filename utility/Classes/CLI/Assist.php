@@ -2811,7 +2811,7 @@ class Assist
 
                         $text = str_replace('password', 'pass', $text);
 
-                        $dir = self::getFullPath(PATH_TO_DATABASE . '/database.php');
+                        $dir = self::getFullPath(get_path(func()->const('database'), '/database.php'));
                         file_put_contents($dir, $text);
                         self::sleep($dir.$ass->ansii('green')." cleaned up!\n".$ass->ansii('reset'));
 
