@@ -22,10 +22,7 @@ if (SYSTEM_TYPE === 'services') :
                     $content = str_replace('use function Lightroom\Templates\Functions\{render, redirect, json, view};', '', $content);
 
                     // remove $this->view->render
-                    $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\)[;])/', 'app(\'screen\')->render([
-                \'status\' => \'success\',
-                \'message\' => \'route works!\'
-            ]);', $content);
+                    $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\)[;])/', 'app(\'screen\')->render([\'status\' => \'success\', \'message\' => \'route works!\']);', $content);
                 });
             }
         ],
@@ -38,10 +35,7 @@ if (SYSTEM_TYPE === 'services') :
                 Assist::onDecrypt(function(&$content)
                 {
                     // remove $this->view->render
-                    $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\)[;])/', 'app(\'screen\')->render([
-                        \'status\' => \'success\',
-                        \'message\' => \'route works!\'
-                    ]);', $content);
+                    $content = preg_replace('/(\$this->view->render\([\'|"](\S+?)[\'|"]\)[;])/', 'app(\'screen\')->render([\'status\' => \'success\', \'message\' => \'route works!\']);', $content);
                 });
             }
         ]
