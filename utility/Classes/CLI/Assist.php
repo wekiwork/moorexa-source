@@ -611,6 +611,12 @@ class Assist
     // constructor
     public function __construct()
     {
+        // set the table path
+        self::$tablePath = get_path(PATH_TO_DATABASE, '/Tables/');
+
+        // set the directive path
+        self::$directivePath = get_path(PATH_TO_DIRECTIVES, '/');
+
         // running from a browser ?
         if (defined('ASSIST_TOKEN')) :
         
