@@ -1863,7 +1863,7 @@ class Assist
                     break;
 
                 case 'guard':
-                    $dir = self::$assistPath . PATH_TO_GUARDS;
+                    $dir = self::$assistPath . get_path(PATH_TO_GUARDS, '/');
 
                     $exp = explode(',', $arg[1]);
 
@@ -2321,7 +2321,7 @@ class Assist
 
                         $middleware = explode('/', $ar);
 
-                        $root = self::getFullPath(PATH_TO_MIDDLEWARE);
+                        $root = self::getFullPath(get_path(PATH_TO_MIDDLEWARE, '/'));
                         $name = end($middleware);
 
                         $name = preg_replace('/[^a-zA-Z_]/', ' ', $name);
@@ -2703,7 +2703,7 @@ class Assist
                 case 'clihelper':
                 case 'cli':
                 case 'console':
-                    $dir = self::getFullPath(PATH_TO_CONSOLE . 'Helper/');
+                    $dir = self::getFullPath(get_path(PATH_TO_CONSOLE, '/Helper/'));
 
                     $exp = explode(',', $arg[1]);
 
@@ -3435,7 +3435,7 @@ class Assist
 
                         $channel = explode('/', $ar);
 
-                        $root = self::getFullPath(func()->const('database') . '/Channels/');
+                        $root = self::getFullPath(get_path(func()->const('database'), '/Channels/'));
                         $name = end($channel);
 
                         $name = preg_replace('/[^a-zA-Z_]/', ' ', $name);
@@ -3695,7 +3695,7 @@ class Assist
 
                             if (count($other) > 0)
                             {
-                                $dbfile = self::getFullPath(func()->const('database') . '/database.php');
+                                $dbfile = self::getFullPath(get_path(func()->const('database'), '/database.php'));
 
                                 foreach ($other as $i => $option)
                                 {
@@ -4822,27 +4822,18 @@ class Assist
 
                     case '--nocache':
                     case '-nocache':
-                        if (!defined('IGNORE_SAVECACHE'))
-                        {
-                            define('IGNORE_SAVECACHE', 1);
-                        }
+                        if (!defined('IGNORE_SAVECACHE')) define('IGNORE_SAVECACHE', 1);
                         break;
 
                     case '-schema':
                     case '-schemas':
                         $schema = true;
-                        if ($val !== false)
-                        {
-                            $schemaList = explode(',', $val);
-                        }
+                        if ($val !== false) $schemaList = explode(',', $val);
                         break;
 
                     case '-tables':
                     case '-table':
-                        if ($val !== false)
-                        {
-                            $tables = explode(',', $val);
-                        }
+                        if ($val !== false) $tables = explode(',', $val);
                         break;
 
                     case '-from':
@@ -4888,19 +4879,13 @@ class Assist
         {
             $tables = [];
 
-            if (!is_null($_command) && strpos($_command, '-') === false)
-            {
-                $tables = explode(',', $_command);
-            }
+            if (!is_null($_command) && strpos($_command, '-') === false) $tables = explode(',', $_command);
 
             self::out($ass->ansii('bold')."\nMigrate Tables\n");
 
             $directory = self::getFullPath(self::$tablePath);
 
-            if ($usingFrom)
-            {
-                $directory = $fromDir . '/';
-            }
+            if ($usingFrom) $directory = $fromDir . '/';
 
             if (is_dir($directory))
             {
@@ -4956,7 +4941,7 @@ class Assist
         }
         elseif ($schema)
         {
-            $folder = self::getFullPath(func()->const('database') . '/Schemas/');
+            $folder = self::getFullPath(get_path(func()->const('database'), '/Schemas/'));
 
             if (count($schemaList) == 0)
             {
@@ -5354,10 +5339,7 @@ class Assist
 
         $option = isset($arg[0]) ? $arg[0] : 'deploy';
 
-        if ($option[0] == '-')
-        {
-            $option = 'deploy';
-        }
+        if ($option[0] == '-') $option = 'deploy';
 
         self::out($ass->ansii('bold')."\n".ucfirst($option)." Production server\n");
 
@@ -5387,9 +5369,9 @@ class Assist
 
                     $hash = md5($url);
 
-                    $zipfile = self::getFullPath(PATH_TO_STORAGE . '/Tmp/Deploy'.time().'.zip');
+                    $zipfile = self::getFullPath(get_path(PATH_TO_STORAGE, '/Tmp/Deploy'.time().'.zip'));
 
-                    $logfile = self::getFullPath(PATH_TO_STORAGE . '/Logs/Deploy/deploylog'.$hash.'.json');
+                    $logfile = self::getFullPath(get_path(PATH_TO_STORAGE, '/Logs/Deploy/deploylog'.$hash.'.json'));
 
                     $other = null;
                     $haslognew = false;
@@ -5493,10 +5475,7 @@ class Assist
 
                             $url .= '?size='.$allfiles;
 
-                            if ($notrack)
-                            {
-                                $url .= '&notrack=true';
-                            }
+                            if ($notrack) $url .= '&notrack=true';
 
                             $url .= $other;
                             $mime = mime_content_type($zipfile);
@@ -5599,10 +5578,7 @@ class Assist
                     // rollback
                     if ($rollback)
                     {
-                        if (!is_null($copyLogFile))
-                        {
-                            file_put_contents($logfile, $copyLogFile);
-                        }
+                        if (!is_null($copyLogFile)) file_put_contents($logfile, $copyLogFile);
                     }
 
                     break;
@@ -5711,7 +5687,7 @@ class Assist
         {
             case 'clean':
 
-                $files = getAllFiles(self::getFullPath(func()->const('storage') . '/Caches/'. $dir));
+                $files = getAllFiles(self::getFullPath(get_path(func()->const('storage'), '/Caches/'. $dir)));
                 $reduce = reduce_array($files);
                 
 
@@ -5735,19 +5711,19 @@ class Assist
                 endforeach;
 
                 // clean directory cache
-                $directoryCache = func()->const('system') . '/Common/directory.cache.json';
+                $directoryCache = get_path(func()->const('system'), '/Common/directory.cache.json');
 
                 // empty file
                 if (file_exists($directoryCache)) file_put_contents($directoryCache, '');
 
                 // clean autoload cache
-                $autoloadCache = func()->const('system') . '/Packager/Moorexa/autoload.cache.json';
+                $autoloadCache = get_path(func()->const('system'), '/Packager/Moorexa/autoload.cache.json');
 
                 // empty file
                 if (file_exists($autoloadCache)) file_put_contents($autoloadCache, '');
 
                 // clean happy caches
-                $happyCaches = func()->const('system') . '/Templates/Happy/Web/Caches/';
+                $happyCaches = get_path(func()->const('system'), '/Templates/Happy/Web/Caches/');
 
                 // continue if folder exists
                 if (is_dir($happyCaches)) :
@@ -5833,7 +5809,7 @@ class Assist
         }
         
 
-        bgExec("php -S localhost:{$port} -c ".PATH_TO_KERNEL . '/php.ini ' . __DIR__ . '/Router.php');
+        bgExec("php -S localhost:{$port} -c ".get_path(PATH_TO_KERNEL, '/php.ini'). ' ' . __DIR__ . '/Router.php');
 
         if (!$notab) :
         
@@ -6432,7 +6408,7 @@ class Assist
         self::out($ass->ansii('bold')."\nOptimize Application. Bundle CSS and JS\n");
 
         //read  bundler
-        $bundler = json_decode(file_get_contents(PATH_TO_KERNEL .'loadStatic.json'));
+        $bundler = json_decode(file_get_contents(get_path(PATH_TO_KERNEL, 'loadStatic.json')));
 
         // styles
         $styles = $bundler->stylesheet;
@@ -6595,7 +6571,7 @@ class Assist
 
         if (!$hasCssBundle || !$hasJsBundle)
         {
-            file_put_contents(self::getFullPath(PATH_TO_KERNEL . 'loadStatic.json'), $loadstatic);
+            file_put_contents(self::getFullPath(get_path(PATH_TO_KERNEL, 'loadStatic.json')), $loadstatic);
         }
 
         // generate lock file
@@ -6605,7 +6581,7 @@ class Assist
         ];
 
         // save lock file
-        file_put_contents(self::getFullPath(PATH_TO_KERNEL . 'loadStatic.lock'), json_encode($lockdata, JSON_PRETTY_PRINT));
+        file_put_contents(self::getFullPath(get_path(PATH_TO_KERNEL, 'loadStatic.lock')), json_encode($lockdata, JSON_PRETTY_PRINT));
         self::out("lock file generated in kernel/. Bundling complete..\n");
     }
 
