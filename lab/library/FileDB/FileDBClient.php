@@ -261,7 +261,7 @@ class FileDBClient
                 if (isset($_ENV['filedb']['basedir'])) :
 
                     // get the base directory
-                    $baseDir = $_ENV['filedb']['basedir'];
+                    $baseDir = get_path_from_constant($_ENV['filedb']['basedir']);
 
                     // @var string $extension
                     $extension = self::$extension;

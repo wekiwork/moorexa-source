@@ -166,6 +166,6 @@ rabbitmq:
 # file db configuration
 filedb:
   # tables folder
-  basedir : 'src/database/Filedb/'
+  basedir : '%PATH_TO_DATABASE%/Filedb/'
   # table extension
   extension : 'json'
