@@ -2199,7 +2199,10 @@ class Assist
                     {
                         $break = explode('/', $path);
                         $controller = ucwords($break[0]);
-                        $methodName = $break[1];
+                        $methodName = isset($break[1]) ? $break[1] : null;
+
+                        // no method or controller
+                        if ($methodName === null) return self::out('Missing Controller or View Method. Format: cont/view');
 
                         $methodName = trim(preg_replace("/[^a-zA-Z0-9\s_-]/",'', $methodName));
                         $methodName = lcfirst(preg_replace('/\s{1,}/','',ucwords(preg_replace('/[-]/',' ', $methodName))));
