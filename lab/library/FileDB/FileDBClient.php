@@ -167,6 +167,8 @@ class FileDBClient
     // load success
     private static function success(string $table, $data)
     {
+        if (!is_array($data) && !is_object($data)) return $data;
+
         return new class($data, $table)
         {
             use FileDBMethods;
