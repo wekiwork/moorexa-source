@@ -94,12 +94,6 @@ if ($configuration !== null) :
             echo " [x] Done\n";
             $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
 
-            // get the routing key
-            $routingKey = $msg->delivery_info['routing_key'];
-
-            // get the delivery tag
-            $deliveryTag = $msg->delivery_info['delivery_tag'];
-
             // trigger taskComplete event here
             QueueHandler::triggerEvent('taskComplete', $class->getJobName(), $returnValue);
 

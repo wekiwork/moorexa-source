@@ -340,6 +340,8 @@ function bash(array $extenal, array $bash) : array
                 // push now
                 if (is_string($path)) $scripts[$alaise] = ['start' => function($next, $argv) use ($path){
 
+                    $path = get_path_from_constant($path);
+
                     // include file if it exists
                     if (file_exists($path)) include_once $path;
 
@@ -349,7 +351,7 @@ function bash(array $extenal, array $bash) : array
 
             // merge now
             $bash = array_merge($bash, $scripts);
-
+            
         endif;
 
     endif;
