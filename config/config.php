@@ -119,6 +119,14 @@ $config->bootstrap ([
 	 * 
 	*/
 	'controller.namespace_prefix' => '',
+
+	/*
+	 ***************************
+	 * 
+	 * @config.csrf_salt (default = '') 
+	 * 
+	*/
+	'csrf_salt' => '9193f77b81110652ca39fa82c763e5b2cb53772c',
 	
 	/*
 	 ***************************
