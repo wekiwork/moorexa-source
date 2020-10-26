@@ -2,7 +2,7 @@
 namespace HttpClient;
 
 use GuzzleHttp\Psr7\Request;
-use function Lightroom\Requests\Functions\{get, post, file};
+use function Lightroom\Requests\Functions\{get, post, files};
 /**
  * @package A Simple HTTP Request Manager for our php applicqtion
  * @author Amadi ifeanyi <amadiify.com>
@@ -220,7 +220,7 @@ class Http
     {
         $files = func_get_args();
 
-        if (count($files) == 0 && !file()->empty()) $files = array_keys(file()->all());
+        if (count($files) == 0 && !files()->empty()) $files = array_keys(files()->all());
 
         // check if file exists.
         array_walk($files, function($file, $key){
@@ -245,108 +245,44 @@ class Http
                 }
                 else
                 {
-                    // upload file
-                    $uploadFile = function($file, $files, $filename='upload')
+
+                    if (isset($_FILES[$file]))
                     {
-                        // create dir
-                        $tmpdir = PATH_TO_STORAGE . 'Tmp/';
-
-                        $key = $file;
-                        // create destination and upload to a tmp directory
-                        $name = $files['name'];
-                        $tmpdir .= $name;
-                        // move file
-                        if (move_uploaded_file($files['tmp_name'], $tmpdir))
-                        {
-                            // get handle
-                            $handle = fopen($tmpdir, 'r');
-
-                            // attach file
-                            $this->attachment['multipart'][] = [
-                                'name' => $filename,
-                                'contents' => $handle,
-                                'filename' => $name
-                            ];
-
-                            // add to trash
-                            $this->trash[] = $tmpdir;
-                        }
-                    };
-
-                    if (file()->has($file))
-                    {
-                        $files = file()->get($file);
+                        $files = $_FILES[$file];
 
                         if (!is_array($files['name']))
                         {
-                            // upload file.
-                            $uploadFile($file, $files, $file);
+                            // check tmp loc
+                            if (strlen($files['tmp_name']) > 5) :
+
+                                // get handle
+                                $handle = fopen($files['tmp_name'], 'r');
+
+                                // attach file
+                                $this->attachment['multipart'][] = [
+                                    'name'      => $file,
+                                    'contents'  => $handle,
+                                    'filename'  => $files['name']
+                                ];
+                            
+                            endif;
                         }
                         else
                         {
                             foreach ($files['name'] as $index => $name)
                             {
-                                $build = ['name' => $name, 'tmp_name' => $files['tmp_name'][$index]];
+                                // get handle
+                                $handle = fopen($files['tmp_name'][$index], 'r');
 
-                                // upload file
-                                $uploadFile($file,$build,$file);
+                                // attach file
+                                $this->attachment['multipart'][] = [
+                                    'name'      => $file . '[]',
+                                    'contents'  => $handle,
+                                    'filename'  => $name
+                                ];
                             }
                         }
                     }
-                }
-                
-            }
-            elseif (is_array($file))
-            {
-                if ($this->usingSameOrigin === false)
-                {
-                    // upload file
-                    $uploadFile = function($file, $files, $filename='upload')
-                    {
-                        // create dir
-                        $tmpdir = PATH_TO_STORAGE . 'Tmp/';
-
-                        $key = $file;
-                        // create destination and upload to a tmp directory
-                        $name = $files['name'];
-                        $tmpdir .= $name;
-                        // move file
-                        if (move_uploaded_file($files['tmp_name'], $tmpdir))
-                        {
-                            // get handle
-                            $handle = fopen($tmpdir, 'r');
-
-                            // attach file
-                            $this->attachment['multipart'][] = [
-                                'name' => $filename,
-                                'contents' => $handle,
-                                'filename' => $key
-                            ];
-
-                            // add to trash
-                            $this->trash[] = $tmpdir;
-                        }
-                    };
-
-                    foreach ($file as $key => $v) :
-                    
-                        if (is_array($file[$key]['name'])) :
-                        
-                            foreach ($file[$key]['name'] as $i => $name) :
-                            
-                                $files = ['name' => $name, 'tmp_name' => $file[$key]['tmp_name'][$i]];
-                                $uploadFile($name, $files, $key);
-
-                            endforeach;
-                        
-                        elseif (is_string($file[$key]['name'])) :
-                        
-                            $files = ['name' => $file[$key]['name'], 'tmp_name' => $file[$key]['tmp_name']];
-                            $uploadFile($file[$key]['name'], $files, $key);
-
-                        endif;
-                    
-                    endforeach;
                 }
             }
         });
@@ -482,27 +418,29 @@ class Http
     {
         $current = self::$headers;
 
-        if (is_array($header))
-        {
+        if (is_array($header)) :
+        
             $current = array_merge($current, $header);
             self::$headers = $current;
-        }
-        else
-        {
+        
+        else:
+        
             $args = func_get_args();
             $headers = [];
 
-            foreach ($args as $index => $header)
-            {
+            foreach ($args as $index => $header) :
+            
                 $toArray = explode(':', $header);
                 $key = trim($toArray[0]);
                 $val = trim($toArray[1]);
                 $headers[$key] = $val;
-            }
+            
+            endforeach;
 
             $current = array_merge($current, $headers);
             self::$headers = $current;
-        }
+        
+        endif;
 
         // clean up
         $current = null;
